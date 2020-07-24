@@ -1,0 +1,34 @@
+﻿@page "/todo"
+
+<h3>Todo List</h3>
+<h4>You have @GetNumberOfIncompleteItems() incomplete todos</h4>
+<ul>
+    @foreach(TodoItem item in items)
+    {
+        <li>
+            <input type="checkbox" @bind="item.IsDone"/>
+            <input @bind="item.Title"/>
+        </li>
+    }
+</ul>
+
+<input placeholder="What's next?" @bind="newItem"/>
+<button @onclick="AddTodo">Add</button>
+
+@code {
+    private TodoItems items = new TodoItems();
+    private string newItem = "";
+    
+    private void AddTodo()
+    {
+        if (string.IsNullOrWhiteSpace(newItem))
+        {
+            return;
+        }
+
+        items.Add(newItem);
+        newItem = string.Empty;
+    }
+
+    private int GetNumberOfIncompleteItems() => items.Count(item => !item.IsDone);
+}
